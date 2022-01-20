@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nearg\\source\\repos\\BoutiquePool\\BoutiquePool\\BoutiquePool.csproj": {}
+    "C:\\Users\\nearg\\source\\repos\\UniecoBack\\BoutiquePool\\BoutiquePool.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nearg\\source\\repos\\BoutiquePool\\BoutiquePool\\BoutiquePool.csproj": {
+    "C:\\Users\\nearg\\source\\repos\\UniecoBack\\BoutiquePool\\BoutiquePool.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nearg\\source\\repos\\BoutiquePool\\BoutiquePool\\BoutiquePool.csproj",
+        "projectUniqueName": "C:\\Users\\nearg\\source\\repos\\UniecoBack\\BoutiquePool\\BoutiquePool.csproj",
         "projectName": "BoutiquePool",
-        "projectPath": "C:\\Users\\nearg\\source\\repos\\BoutiquePool\\BoutiquePool\\BoutiquePool.csproj",
+        "projectPath": "C:\\Users\\nearg\\source\\repos\\UniecoBack\\BoutiquePool\\BoutiquePool.csproj",
         "packagesPath": "C:\\Users\\nearg\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nearg\\source\\repos\\BoutiquePool\\BoutiquePool\\obj\\",
+        "outputPath": "C:\\Users\\nearg\\source\\repos\\UniecoBack\\BoutiquePool\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nearg\\AppData\\Roaming\\NuGet\\NuGet.Config",

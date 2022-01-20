@@ -43,7 +43,7 @@ namespace BoutiquePool.Repositories.MongoDB
         }
 
         public T FirstOrDefault(Expression<Func<T, bool>> expression)
-        {
+         {
             return this.Collection.Find(expression).FirstOrDefault();
         }
 
@@ -65,6 +65,11 @@ namespace BoutiquePool.Repositories.MongoDB
         public T Get(string id)
         {
             return this.Collection.Find<T>(i => i.id == id).FirstOrDefault();
+        }
+
+        public List<T> GetXelements(int quantity)
+        {
+            return this.Collection.Find<T>(f => true).Limit(quantity).ToList();
         }
 
 

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Unieco.Services.Email;
 
 namespace BoutiquePool
 {
@@ -32,23 +33,29 @@ namespace BoutiquePool
 
             services.Configure<Models.Configurations.MongoDB.DatabaseSettings>(
                 Configuration.GetSection(nameof(Models.Configurations.MongoDB.DatabaseSettings)));
-          
+
+            services.Configure<Models.Configurations.AWS.Credentials>(Configuration.GetSection("AWSCredentials"));
+            services.Configure<Models.Configurations.AWS.S3Configuration>(Configuration.GetSection("AWSS3"));
+
             services.Configure<Models.Configurations.MongoDB.DatabaseSettings>(Configuration.GetSection("DatabaseSettings"));
 
             services.AddSingleton(sp => sp.GetRequiredService<IOptions<Models.Configurations.MongoDB.DatabaseSettings>>().Value);
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<Models.Configurations.AWS.Credentials>>().Value);
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<Models.Configurations.AWS.S3Configuration>>().Value);
 
-                services.AddControllers()
+            services.AddControllers()
                 .AddNewtonsoftJson(options => options.UseMemberCasing());
+
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddTransient<IEmailSender, AuthMessageSender>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+          
+            app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
 

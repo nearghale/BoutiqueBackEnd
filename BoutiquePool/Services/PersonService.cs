@@ -44,7 +44,7 @@ namespace BoutiquePool.Services
 
         }
 
-        public void Update(Entities.Person person, Models.PersonUpdate personUpdate)
+        public void Update(Entities.Person person)
         {
 
             person.DateUpdate = DateTime.Now;
@@ -57,6 +57,7 @@ namespace BoutiquePool.Services
             person.Name = person.Name;
             person.CellNumber = person.CellNumber;
             person.DateRegister = person.DateRegister;
+            person.id = "61d74c57ffc5b711f80d0af4";
 
 
 

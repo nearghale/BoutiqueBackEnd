@@ -26,9 +26,9 @@ namespace BoutiquePool.Controllers
 
         public WorkerController(DatabaseSettings databaseSettings, S3Configuration s3Configuration, Credentials credentials)
         {
-            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "worker");
-            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "person");
-            mediaRepository = new Repositories.MongoDB.PersistentRepository<Entities.Media>(databaseSettings, "media");
+            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "cad_worker");
+            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "cad_person");
+            mediaRepository = new Repositories.MongoDB.PersistentRepository<Entities.Media>(databaseSettings, "aux_media");
 
 
             workerService = new WorkerService(workerRepository, personRepository);

@@ -17,18 +17,14 @@ namespace BoutiquePool.Services
         private Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabItem> _serviceEstabItemRepository;
         private Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabView> _serviceEstabViewRepository;
         private Repositories.MongoDB.PersistentRepository<Entities.OpeningHours> _openingHoursRepository;
-
-
+        private Repositories.MongoDB.PersistentRepository<Entities.Enquadramento> _enquadramentoRepository;
 
         private Repositories.MongoDB.PersistentRepository<Entities.Precificacao> _precificacaoRepository;
-
-
-
-
 
         private Repositories.MongoDB.PersistentRepository<Entities.Worker> _workerRepository;
         private Repositories.MongoDB.PersistentRepository<Entities.ProdService> _prodServiceRepository;
         private Repositories.MongoDB.PersistentRepository<Entities.Address> _addressRepository;
+        private Repositories.MongoDB.PersistentRepository<Entities.Other> _otherRepository;
 
 
 
@@ -45,8 +41,10 @@ namespace BoutiquePool.Services
                                   Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabItem> serviceEstabItemRepository,
                                   Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabView> serviceEstabViewRepository,
                                   Repositories.MongoDB.PersistentRepository<Entities.Address> addressRepository,
-                                   Repositories.MongoDB.PersistentRepository<Entities.Precificacao> precificacaoRepository,
-                                   Repositories.MongoDB.PersistentRepository<Entities.OpeningHours> openingHoursRepository
+                                  Repositories.MongoDB.PersistentRepository<Entities.Precificacao> precificacaoRepository,
+                                  Repositories.MongoDB.PersistentRepository<Entities.OpeningHours> openingHoursRepository,
+                                  Repositories.MongoDB.PersistentRepository<Entities.Enquadramento> enquadramentoRepository,
+                                  Repositories.MongoDB.PersistentRepository<Entities.Other> otherRepository
                                   )
         {
             _prodServiceRepository = prodServiceRepository;
@@ -64,6 +62,8 @@ namespace BoutiquePool.Services
             _addressRepository = addressRepository;
             _precificacaoRepository = precificacaoRepository;
             _openingHoursRepository = openingHoursRepository;
+            _enquadramentoRepository = enquadramentoRepository;
+            _otherRepository = otherRepository;
 
 
 
@@ -94,7 +94,7 @@ namespace BoutiquePool.Services
             var prodServiceCreate = _prodServiceRepository.Create(newProdService);
 
 
-
+          
 
 
             for (int c = 0; c < prodService.itens_serv_estab.Count; c++)
@@ -103,6 +103,10 @@ namespace BoutiquePool.Services
                 newItemServEstab.IdProdService = prodServiceCreate.id;
                 newItemServEstab.IdCoreTipoServicoEstabelecimento = prodService.itens_serv_estab[c];
                 _servEstabRepository.Create(newItemServEstab);
+
+          
+               
+
             }
 
             for (int c = 0; c < prodService.itens_enquadra.Count; c++)
@@ -111,6 +115,46 @@ namespace BoutiquePool.Services
                 newItemEnquadra.IdProdService = prodServiceCreate.id;
                 newItemEnquadra.IdCoreEnquadramento = prodService.itens_enquadra[c];
                 _enquadraRepository.Create(newItemEnquadra);
+
+            
+
+            }
+
+            int verificationExistsOtherServEstab = 0;
+
+
+            for (int c = 0; c < prodService.itens_serv_estab.Count; c++)
+            {
+                if(prodService.itens_serv_estab[c] == 14)
+                    verificationExistsOtherServEstab = prodService.itens_serv_estab[c];
+                
+            }
+
+            int verificationExistsOtherItenEnquadra = 0;
+
+
+            for (int c = 0; c < prodService.itens_enquadra.Count; c++)
+            {
+                if (prodService.itens_serv_estab[c] == 13)
+                    verificationExistsOtherItenEnquadra = prodService.itens_enquadra[c];
+
+            }
+
+
+
+            if (prodService.id_core_prod_serv == 18 || verificationExistsOtherServEstab == 14 || verificationExistsOtherItenEnquadra == 13)
+            {
+                var newOther = new Entities.Other();
+                newOther.IdCoreTipoOferta = prodService.id_core_tipo_oferta;
+                newOther.IdCorePilar = prodService.id_core_pilar;
+                newOther.IdProdService = prodServiceCreate.id;
+
+
+                newOther.CadProdServ = prodService.cad_prod_serv_other;
+                newOther.CadOfferCategory = prodService.cad_offer_category_other;
+                newOther.CadServiceGroup = prodService.cad_service_group_other;
+
+                _otherRepository.Create(newOther);
             }
 
 
@@ -127,16 +171,16 @@ namespace BoutiquePool.Services
 
             if (itens.Count() > 5)
             {
-                if(itens.Count() % 5 == 0)
+                if (itens.Count() % 5 == 0)
                 {
                     var itensReturns = Enumerable.Reverse(itens).Take(5).Reverse().ToList();
-                    return itensReturns;
+                    return itensReturns.FindAll(i => i.Status == "active");
                 }
                 else
                 {
 
                     var itensReturns = Enumerable.Reverse(itens).Take(itens.Count() % 5).Reverse().ToList();
-                    return itensReturns;
+                    return itensReturns.FindAll(i => i.Status == "active");
 
                 }
 
@@ -144,7 +188,7 @@ namespace BoutiquePool.Services
             }
 
 
-            return itens;
+            return itens.FindAll(i => i.Status == "active");
 
         }
 
@@ -266,7 +310,7 @@ namespace BoutiquePool.Services
 
                 if (Array.Exists(filter.type_offer, t => t == 1))
                 {
-                    var itemsServico = _serviceEstabItemRepository.Find(s => s.Cornerstone == "Sustentáveis" && s.TypeOffer == "Serviço" && s.Status == "active" );
+                    var itemsServico = _serviceEstabItemRepository.Find(s => s.Cornerstone == "Sustentáveis" && s.TypeOffer == "Serviço" && s.Status == "active");
                     itemsServico.ForEach((item) =>
                     {
                         itemsSustentaveis.Add(item);
@@ -289,8 +333,8 @@ namespace BoutiquePool.Services
                     items.Add(item);
                 });
             }
-            
-            if(filter.distance_filter != 0)
+
+            if (filter.distance_filter != 0)
             {
                 var itemsFilterDistance = new List<Entities.ServiceEstabItem>();
 
@@ -298,13 +342,13 @@ namespace BoutiquePool.Services
                 {
                     var d1 = filter.location_user.latitude * (Math.PI / 180.0);
                     var num1 = filter.location_user.longitude * (Math.PI / 180.0);
-                    var d2 =  item.Lat * (Math.PI / 180.0);
+                    var d2 = item.Lat * (Math.PI / 180.0);
                     var num2 = item.Lon * (Math.PI / 180.0) - num1;
                     var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) +
                         Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
                     var result = Convert.ToInt32((6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3))) / 1000));
 
-                    if(result < filter.distance_filter && item.Status == "active")
+                    if (result < filter.distance_filter && item.Status == "active")
                         itemsFilterDistance.Add(item);
 
                 });
@@ -324,13 +368,9 @@ namespace BoutiquePool.Services
         public Entities.ServiceEstabView CreateServiceEstabView(Entities.ProdService serviceEstab, string idService)
         {
             Entities.ServiceEstabView serviceEstabView = new Entities.ServiceEstabView();
-            
+
             //PRODUCT 
             serviceEstabView.IdService = idService;
-
-       
-
-
 
             var images = _imageProdServiceRepository.Find(i => i.IdProdService == serviceEstab.id);
             List<string> listImages = new List<string>();
@@ -343,17 +383,18 @@ namespace BoutiquePool.Services
 
                     listImages.Add(url);
 
-                    
+
                 };
             }
 
             serviceEstabView.ImagesProducts = listImages;
-
+            serviceEstabView.Medida = serviceEstab.Medida;
 
             var prodService = _produtoServicoRepository.FirstOrDefault(p => p.IdCoreProdutoServico == serviceEstab.IdCoreProdServ);
             serviceEstabView.NameServiceEstab = prodService.StCoreProdutoServico;
             serviceEstabView.Active = "Disponível";
 
+            //TIPO
             var typeServiceEstab = _servEstabRepository.Find(s => s.IdProdService == serviceEstab.id);
             List<string> listItemsTypeServeEstab = new List<string>();
 
@@ -363,6 +404,20 @@ namespace BoutiquePool.Services
                 listItemsTypeServeEstab.Add(tipoServEstab.StCoreTipoServicoEstabelecimento);
             }
             serviceEstabView.CategoryType = listItemsTypeServeEstab;
+
+            //ATENDE
+            var attendanceEstab = _enquadraRepository.Find(s => s.IdProdService == serviceEstab.id);
+            List<string> listItemsAttendanceEstab = new List<string>();
+
+            for (int c = 0; c < attendanceEstab.Count; c++)
+            {
+                var tipoAttendanceEstab = _enquadramentoRepository.FirstOrDefault(t => t.IdCoreEnquadramento == attendanceEstab[c].IdCoreEnquadramento);
+                listItemsAttendanceEstab.Add(tipoAttendanceEstab.StCoreEnquadramento);
+            }
+            serviceEstabView.EnquadraType = listItemsAttendanceEstab;
+
+
+
             serviceEstabView.Price = serviceEstab.Valor;
 
             var precificacao = _precificacaoRepository.FirstOrDefault(p => p.IdCorePrecificacao == serviceEstab.IdCorePrecificacao);
@@ -382,6 +437,8 @@ namespace BoutiquePool.Services
             serviceEstabView.WhatsappNumber = worker.WhatsappNumber;
             serviceEstabView.Site = worker.Site;
             serviceEstabView.PhoneCorp = worker.PhoneCorp;
+            serviceEstabView.CNPJ = worker.CPFCNPJ;
+
 
             //DESCRIPTION PRODUCT
             serviceEstabView.Description = serviceEstab.Descricao;
@@ -453,7 +510,7 @@ namespace BoutiquePool.Services
 
         }
 
-            public Entities.ServiceEstabItem CreateServiceEstabItem(Entities.ProdService serviceEstab, string idService)
+        public Entities.ServiceEstabItem CreateServiceEstabItem(Entities.ProdService serviceEstab, string idService)
         {
 
 
@@ -483,7 +540,7 @@ namespace BoutiquePool.Services
             for (int c = 0; c < typeServiceEstab.Count; c++)
             {
 
-             
+
 
                 var tipoServEstab = _tipoServicoEstabelecimentoRepository.FirstOrDefault(t => t.IdCoreTipoServicoEstabelecimento == typeServiceEstab[c].IdCoreTipoServicoEstabelecimento);
                 listItemsTypeServeEstab.Add(tipoServEstab.StCoreTipoServicoEstabelecimento);

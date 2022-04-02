@@ -23,52 +23,16 @@ namespace BoutiquePool.Controllers
 
         public LoginController(DatabaseSettings databaseSettings)
         {
-            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "person");
-            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "worker");
-            prodServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdService>(databaseSettings, "prod_servico");
-            purchaseRepository = new Repositories.MongoDB.PersistentRepository<Entities.Purchase>(databaseSettings, "purchase");
+            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "cad_person");
+            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "cad_worker");
+            prodServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdService>(databaseSettings, "cad_prod_serv");
+            purchaseRepository = new Repositories.MongoDB.PersistentRepository<Entities.Purchase>(databaseSettings, "sis_purchase");
 
 
             loginService = new LoginService(personRepository, workerRepository, prodServiceRepository, purchaseRepository);
         }
 
-        [HttpPost("criptografar")]
-
-        public ActionResult Criptografar()
-        {
-            var persons = personRepository.Get();
-
-            persons.ForEach((person) =>
-            {
-                var senhaCripto = CriptoHelper.Encrypt(person.Password);
-                person.Password = senhaCripto;
-                personRepository.Update(person.id, person);
-            });
-
-
-
-
-            return Ok();
-        }
-
-        [HttpPost("descriptografar")]
-
-        public ActionResult Descriptografar()
-        {
-            var persons = personRepository.Get();
-
-            persons.ForEach((person) =>
-            {
-                var senhaDescrip = CriptoHelper.Decrypt(person.Password);
-                person.Password = senhaDescrip;
-                personRepository.Update(person.id, person);
-            });
-
-
-
-
-            return Ok();
-        }
+      
 
         [HttpPost("descriptografar/{id}")]
 
@@ -82,6 +46,19 @@ namespace BoutiquePool.Controllers
                 personRepository.Update(person.id, person);
 
 
+            return Ok();
+        }
+
+        [HttpPost("criptografar/{id}")]
+
+        public ActionResult CriptografarOnlyPerson(string id)
+        {
+            var person = personRepository.FirstOrDefault(p => p.id == id);
+
+
+            var senhaDescrip = CriptoHelper.Encrypt(person.Password);
+            person.Password = senhaDescrip;
+            personRepository.Update(person.id, person);
 
 
             return Ok();

@@ -26,8 +26,8 @@ namespace BoutiquePool.Controllers
 
         public PersonController(DatabaseSettings databaseSettings, S3Configuration s3Configuration, Credentials credentials)
         {
-            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "person");
-            mediaRepository = new Repositories.MongoDB.PersistentRepository<Entities.Media>(databaseSettings, "media");
+            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "cad_person");
+            mediaRepository = new Repositories.MongoDB.PersistentRepository<Entities.Media>(databaseSettings, "aux_media");
 
             personService = new PersonService(personRepository);
             mediaService = new MediaService(mediaRepository, credentials, s3Configuration);
@@ -85,6 +85,17 @@ namespace BoutiquePool.Controllers
             return personService.Create(person);
         }
 
+
+        [HttpPut("{id}")]
+        public ActionResult Update(string id)
+        {
+            var person = personRepository.FirstOrDefault(a => a.id == "6218e9d63e51c3a24fa57d9f");
+           
+             personService.Update(person);
+
+            return Ok();
+        }
+
         [HttpGet]
         public ActionResult<List<Entities.Person>> GetAll()
         {
@@ -93,7 +104,7 @@ namespace BoutiquePool.Controllers
         }
 
 
-        [HttpPut("{email}")]
+       /* [HttpPut("{email}")]
         public ActionResult Update(string email, Models.PersonUpdate personModel)
         {
 
@@ -111,7 +122,7 @@ namespace BoutiquePool.Controllers
             personService.Update(person, personModel);
             return Ok();
 
-        }
+        }*/
 
         [HttpDelete("{email}")]
         public ActionResult Delete(string email)

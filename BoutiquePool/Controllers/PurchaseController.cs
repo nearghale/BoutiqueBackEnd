@@ -29,10 +29,10 @@ namespace BoutiquePool.Controllers
 
         public PurchaseController(DatabaseSettings databaseSettings)
         {
-            purchaseRepository = new Repositories.MongoDB.PersistentRepository<Entities.Purchase>(databaseSettings, "purchase");
-            prodServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdService>(databaseSettings, "prod_servico");
-            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "worker");
-            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "person");
+            purchaseRepository = new Repositories.MongoDB.PersistentRepository<Entities.Purchase>(databaseSettings, "sis_purchase");
+            prodServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdService>(databaseSettings, "cad_prod_serv");
+            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "cad_worker");
+            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "cad_person");
 
 
             purchaseService = new PurchaseService(purchaseRepository, prodServiceRepository, personRepository);
@@ -43,7 +43,8 @@ namespace BoutiquePool.Controllers
         public ActionResult<Entities.Purchase> Create(Entities.Purchase purchase)
         {
            
-            /*var workerVerifySame = workerRepository.FirstOrDefault(w => w.IdUser == purchase.IDPerson);
+            var workerVerifySame = workerRepository.FirstOrDefault(w => w.IdUser == purchase.IDPerson);
+            if(workerVerifySame != null) { 
             var productWorker = prodServiceRepository.FirstOrDefault(p => p.IdWorker == workerVerifySame.id && p.id == purchase.IDProduct );
 
             if (productWorker != null)
@@ -56,7 +57,8 @@ namespace BoutiquePool.Controllers
                     status = 401,
                     instance = "/purchase"
                 });
-            }*/
+            };
+            }
 
 
             return purchaseService.Create(purchase);

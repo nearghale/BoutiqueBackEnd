@@ -21,6 +21,9 @@ namespace BoutiquePool.Entities
         [JsonProperty("category_type")]
         public List<string> CategoryType { get; set; }
 
+        [JsonProperty("enquadra_type")]
+        public List<string> EnquadraType { get; set; }
+
         [JsonProperty("price")]
         public string Price { get; set; }
 
@@ -39,6 +42,8 @@ namespace BoutiquePool.Entities
         [JsonProperty("type_offer")]
         public string TypeOffer { get; set; }
 
+        [JsonProperty("cnpj")]
+        public string CNPJ { get; set; }
 
         //contact
         [JsonProperty("phone_corp")]

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Unieco.Services.Email;
 using Unieco.Models;
 using BoutiquePool.Models.Configurations.MongoDB;
+using Unieco.Helpers;
 
 namespace BoutiquePool.Controllers
 {
@@ -20,7 +21,7 @@ namespace BoutiquePool.Controllers
 
         public EmailController(IEmailSender emailSender, IWebHostEnvironment env, DatabaseSettings databaseSettings)
         {
-            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "person");
+            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "cad_person");
             _emailSender = emailSender;
         }
    
@@ -42,7 +43,8 @@ namespace BoutiquePool.Controllers
 
 
             var assunto = "Solicitação de recuperação de senha";
-            var mensagem = "Olá " + person.Name + ", você solicitou a recuperação de sua senha do app unieco global, segue suas credenciais: <br /><br />" + "<b>nome de usuário: </b>"+ person.Username + "<br />" + "<b>senha: </b>" + person.Password;
+            var passwordDescryp = CriptoHelper.Decrypt(person.Password);
+            var mensagem = "Olá " + person.Name + ", você solicitou a recuperação de sua senha do app unieco global, segue suas credenciais: <br /><br />" + "<b>nome de usuário: </b>"+ person.Username + "<br />" + "<b>senha: </b>" + passwordDescryp;
 
 
             if (ModelState.IsValid)

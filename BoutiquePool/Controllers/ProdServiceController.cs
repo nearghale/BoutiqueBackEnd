@@ -30,7 +30,8 @@ namespace BoutiquePool.Controllers
         protected Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabItem> serviceEstabItemRepository;
         protected Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabView> serviceEstabViewRepository;
         protected Repositories.MongoDB.PersistentRepository<Entities.OpeningHours> openingHoursRepository;
-
+        protected Repositories.MongoDB.PersistentRepository<Entities.Enquadramento> enquadramentoRepository;
+        protected Repositories.MongoDB.PersistentRepository<Entities.Other> otherRepository;
 
         protected Repositories.MongoDB.PersistentRepository<Entities.Precificacao> precificacaoRepository;
 
@@ -47,30 +48,32 @@ namespace BoutiquePool.Controllers
 
         public ProdServiceController(DatabaseSettings databaseSettings, S3Configuration s3Configuration, Credentials credentials)
         {
-            prodServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdService>(databaseSettings, "prod_servico");
-            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "worker");
-            tipoOfertaRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoOferta>(databaseSettings, "tipo_oferta");
-            addressRepository = new Repositories.MongoDB.PersistentRepository<Entities.Address>(databaseSettings, "address");
-            mediaRepository = new Repositories.MongoDB.PersistentRepository<Entities.Media>(databaseSettings, "media");
-            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "person");
-            prodServRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdServ>(databaseSettings, "produto_servico");
-            tipoServicoEstabelecimentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoServicoEstabelecimento>(databaseSettings, "tipo_servico_estabelecimento");
-            pilarRepository = new Repositories.MongoDB.PersistentRepository<Entities.Pilar>(databaseSettings, "pilar");
-            serviceEstabItemRepository = new Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabItem>(databaseSettings, "service-estab-item");
-            serviceEstabViewRepository = new Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabView>(databaseSettings, "service-estab-view");
-            openingHoursRepository = new Repositories.MongoDB.PersistentRepository<Entities.OpeningHours>(databaseSettings, "opening_hours");
+            prodServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdService>(databaseSettings, "cad_prod_serv");
+            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "cad_worker");
+            tipoOfertaRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoOferta>(databaseSettings, "core_offer_type");
+            addressRepository = new Repositories.MongoDB.PersistentRepository<Entities.Address>(databaseSettings, "cad_address");
+            mediaRepository = new Repositories.MongoDB.PersistentRepository<Entities.Media>(databaseSettings, "aux_media");
+            personRepository = new Repositories.MongoDB.PersistentRepository<Entities.Person>(databaseSettings, "cad_person");
+            prodServRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdServ>(databaseSettings, "core_product_service");
+            tipoServicoEstabelecimentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoServicoEstabelecimento>(databaseSettings, "core_offer_category");
+            pilarRepository = new Repositories.MongoDB.PersistentRepository<Entities.Pilar>(databaseSettings, "core_branch");
+            serviceEstabItemRepository = new Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabItem>(databaseSettings, "aux_offer_item");
+            serviceEstabViewRepository = new Repositories.MongoDB.PersistentRepository<Entities.ServiceEstabView>(databaseSettings, "aux_offer_view");
+            openingHoursRepository = new Repositories.MongoDB.PersistentRepository<Entities.OpeningHours>(databaseSettings, "cad_opening_hours");
+            enquadramentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Enquadramento>(databaseSettings, "core_service_group");
+            otherRepository = new Repositories.MongoDB.PersistentRepository<Entities.Other>(databaseSettings, "cad_others");
 
 
-            precificacaoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Precificacao>(databaseSettings, "precificacao");
+            precificacaoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Precificacao>(databaseSettings, "core_pricing");
 
 
 
 
-            imageProdServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.TableAux.ImageProdService>(databaseSettings, "image_prod_service");
-            servEstabServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.TableAux.ServEstabService>(databaseSettings, "serv_estab_service");
-            enquadraServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.TableAux.EnquadraService>(databaseSettings, "enquadra_service");
+            imageProdServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.TableAux.ImageProdService>(databaseSettings, "cad_offer_image");
+            servEstabServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.TableAux.ServEstabService>(databaseSettings, "cad_offer_category");
+            enquadraServiceRepository = new Repositories.MongoDB.PersistentRepository<Entities.TableAux.EnquadraService>(databaseSettings, "cad_service_group");
 
-            prodServiceService = new ProdServiceService(prodServiceRepository, workerRepository, imageProdServiceRepository, prodServRepository, tipoServicoEstabelecimentoRepository, servEstabServiceRepository, tipoOfertaRepository, pilarRepository, enquadraServiceRepository, serviceEstabItemRepository, serviceEstabViewRepository, addressRepository, precificacaoRepository, openingHoursRepository);
+            prodServiceService = new ProdServiceService(prodServiceRepository, workerRepository, imageProdServiceRepository, prodServRepository, tipoServicoEstabelecimentoRepository, servEstabServiceRepository, tipoOfertaRepository, pilarRepository, enquadraServiceRepository, serviceEstabItemRepository, serviceEstabViewRepository, addressRepository, precificacaoRepository, openingHoursRepository, enquadramentoRepository, otherRepository);
             mediaService = new MediaService(mediaRepository, credentials, s3Configuration);
 
 

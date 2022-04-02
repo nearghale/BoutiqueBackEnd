@@ -19,8 +19,8 @@ namespace BoutiquePool.Controllers
 
         public AddressController(DatabaseSettings databaseSettings)
         {
-            addressRepository = new Repositories.MongoDB.PersistentRepository<Entities.Address>(databaseSettings, "address");
-            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "worker");
+            addressRepository = new Repositories.MongoDB.PersistentRepository<Entities.Address>(databaseSettings, "cad_address");
+            workerRepository = new Repositories.MongoDB.PersistentRepository<Entities.Worker>(databaseSettings, "cad_worker");
 
             addressService = new AddressService(addressRepository);
 

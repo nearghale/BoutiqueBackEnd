@@ -27,12 +27,12 @@ namespace BoutiquePool.Controllers
 
         public ServiceController(DatabaseSettings databaseSettings)
         {
-            pilarRepository = new Repositories.MongoDB.PersistentRepository<Entities.Pilar>(databaseSettings, "pilar");
-            tipoOfertaRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoOferta>(databaseSettings, "tipo_oferta");
-            prodServRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdServ>(databaseSettings, "produto_servico");
-            precificacaoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Precificacao>(databaseSettings, "precificacao");
-            tipoServicoEstabelecimentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoServicoEstabelecimento>(databaseSettings, "tipo_servico_estabelecimento");
-            enquadramentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Enquadramento>(databaseSettings, "enquadramento");
+            pilarRepository = new Repositories.MongoDB.PersistentRepository<Entities.Pilar>(databaseSettings, "core_branch");
+            tipoOfertaRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoOferta>(databaseSettings, "core_offer_type");
+            prodServRepository = new Repositories.MongoDB.PersistentRepository<Entities.ProdServ>(databaseSettings, "core_product_service");
+            precificacaoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Precificacao>(databaseSettings, "core_pricing");
+            tipoServicoEstabelecimentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.TipoServicoEstabelecimento>(databaseSettings, "core_offer_category");
+            enquadramentoRepository = new Repositories.MongoDB.PersistentRepository<Entities.Enquadramento>(databaseSettings, "core_service_group");
 
             serviceService = new ServiceService(pilarRepository, tipoOfertaRepository, prodServRepository, precificacaoRepository, tipoServicoEstabelecimentoRepository, enquadramentoRepository);
 

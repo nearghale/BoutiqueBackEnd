@@ -19,8 +19,8 @@ namespace BoutiquePool.Controllers
 
         public OpeningHoursController(DatabaseSettings databaseSettings)
         {
-            openingHoursRepository = new Repositories.MongoDB.PersistentRepository<Entities.OpeningHours>(databaseSettings, "opening_hours");
-            addressRepository = new Repositories.MongoDB.PersistentRepository<Entities.Address>(databaseSettings, "address");
+            openingHoursRepository = new Repositories.MongoDB.PersistentRepository<Entities.OpeningHours>(databaseSettings, "cad_opening_hours");
+            addressRepository = new Repositories.MongoDB.PersistentRepository<Entities.Address>(databaseSettings, "cad_address");
 
             openingHoursService = new OpeningHoursService(openingHoursRepository, addressRepository);
 

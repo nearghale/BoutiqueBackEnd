@@ -27,6 +27,10 @@ namespace BoutiquePool.Models
         public string valor { get; set; }
         public string descricao { get; set; }
 
+        public string cad_prod_serv_other { get; set; }
+        public string cad_offer_category_other { get; set; }
+        public string cad_service_group_other { get; set; }
+
         public double lat { get; set; }
 
         public double lon { get; set; }
